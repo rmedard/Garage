@@ -1,5 +1,12 @@
 package app;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import Exceptions.CarStillPresentException;
@@ -13,11 +20,15 @@ public class TestIt {
 		Garage garage = new Garage();
 		garage.addVendor(new Vendor("Jeannot", "Ghost", "jghost@gmail.com", 5));
 		garage.addVendor(new Vendor("Jimmy", "Ghana", "jghana@gmail.com", 12));
-		garage.addVendor(new Vendor("Julian", "Assange", "jassange@gmail.com", 23));
+		garage.addVendor(new Vendor("Julian", "Assange", "jassange@gmail.com",
+				23));
+
+		Garage deserialized;
 		try {
-			garage.addCarToGarage(new Car("OtherCar", "955 Tunga", 2001, 123, 122220.0));
+			garage.addCar(new Car("Indi modoka", "955 Tunga", 2001, 123,
+					122220.0));
 		} catch (CarStillPresentException e) {
-			System.out.println("The car still exists in the showroom");
+			e.printStackTrace();
 		}
 		sc = new Scanner(System.in);
 		while (true) {
@@ -40,10 +51,55 @@ public class TestIt {
 			case "exit":
 				System.exit(0);
 				break;
+			case "serial":
+				new TestIt().serializeGarage(garage);
+				System.out.println("Garage has been serialised");
+				break;
+			case "deserial":
+				deserialized = new TestIt().deserializeGarage();
+				if(deserialized != null){
+					System.out.println(deserialized.getShowRoom().size());
+					for(Car car : deserialized.getShowRoom()){
+						System.out.println("Car model: " + car.getType() +" "+car.getModel());
+					}
+				}else{
+					System.out.println("Null garage");
+				}
+				break;
 			default:
-				System.out.println("Uknown command");	
+				System.out.println("Uknown command");
 			}
 		}
 
+	}
+
+	private void serializeGarage(Garage garage) {
+		File garageFile = new File("Garage.ser");
+		try (FileOutputStream out = new FileOutputStream(garageFile)) {
+			ObjectOutputStream objOut = new ObjectOutputStream(out);
+			objOut.writeObject(garage);
+			objOut.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+	}
+	
+	private Garage deserializeGarage(){
+		File garageFile = new File("Garage.ser");
+		Garage gar = null;
+		try(FileInputStream in = new FileInputStream(garageFile)) {
+			gar = (Garage)new ObjectInputStream(in).readObject();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		return gar;
 	}
 }
