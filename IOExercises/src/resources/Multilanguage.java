@@ -52,12 +52,12 @@ public class Multilanguage {
 
 			props_fr.setProperty("save", "Sauvegarder");
 			props_fr.setProperty("add car", "Ajouter");
-			props.setProperty("remove car", "Supprimer voiture");
-			props.setProperty("Type", "Type");
-			props.setProperty("Model", "Modèle");
-			props.setProperty("YOF", "Année de fab.");
-			props.setProperty("Km", "Kilometrage");
-			props.setProperty("cost", "Prix");
+			props_fr.setProperty("remove car", "Supprimer voiture");
+			props_fr.setProperty("Type", "Type");
+			props_fr.setProperty("Model", "Modèle");
+			props_fr.setProperty("YOF", "Année de fab.");
+			props_fr.setProperty("Km", "Kilometrage");
+			props_fr.setProperty("cost", "Prix");
 
 			defaultBundle = ResourceBundle.getBundle("props", locales[0]);
 			frenchBundle = ResourceBundle.getBundle("props_fr", locales[1]);
