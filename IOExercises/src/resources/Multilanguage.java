@@ -5,14 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class Multilanguage {
 
 	private static Multilanguage multi = new Multilanguage();
-	private Properties myBundle;
-	private Properties myBundle_en;
-	private Properties myBundle_fr;
+	private Properties props;
+	private Properties props_fr;
+
+	private Locale[] locales = { Locale.ENGLISH, Locale.FRENCH };
+
+	private ResourceBundle defaultBundle;
+	private ResourceBundle frenchBundle;
 
 	private Multilanguage() {
 		generateProps();
@@ -23,28 +29,42 @@ public class Multilanguage {
 	}
 
 	private void generateProps() {
-		this.myBundle = new Properties();
-		this.myBundle_en = new Properties();
-		this.myBundle_fr = new Properties();
+		this.props = new Properties();
+		this.props_fr = new Properties();
 
 		OutputStream out_en = null;
 		OutputStream out_fr = null;
 
 		try {
 			out_en = new FileOutputStream(new File(
-					"src/resources/messages_en.properties"));
+					"src/resources/props.properties"));
 			out_fr = new FileOutputStream(new File(
-					"src/resources/messages_fr.properties"));
+					"src/resources/props_fr.properties"));
 
-			myBundle_en.setProperty("save", "Save");
-			myBundle_en.setProperty("add", "Add");
+			props.setProperty("save car", "Save Car");
+			props.setProperty("add car", "Add Car");
+			props.setProperty("remove car", "Remove Car");
+			props.setProperty("Type", "Type");
+			props.setProperty("Model", "Model");
+			props.setProperty("YOF", "Year of fab.");
+			props.setProperty("Km", "Kilometer");
+			props.setProperty("cost", "Cost");
 
-			myBundle_fr.setProperty("save", "Sauvegarder");
-			myBundle_fr.setProperty("add", "Ajouter");
+			props_fr.setProperty("save", "Sauvegarder");
+			props_fr.setProperty("add car", "Ajouter");
+			props.setProperty("remove car", "Supprimer voiture");
+			props.setProperty("Type", "Type");
+			props.setProperty("Model", "Modèle");
+			props.setProperty("YOF", "Année de fab.");
+			props.setProperty("Km", "Kilometrage");
+			props.setProperty("cost", "Prix");
+
+			defaultBundle = ResourceBundle.getBundle("props", locales[0]);
+			frenchBundle = ResourceBundle.getBundle("props_fr", locales[1]);
 
 			try {
-				myBundle_en.store(out_en, null);
-				myBundle_fr.store(out_fr, null);
+				props.store(out_en, null);
+				props_fr.store(out_fr, null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -67,6 +87,14 @@ public class Multilanguage {
 				}
 			}
 		}
+	}
+
+	public ResourceBundle getDefaultBundle() {
+		return defaultBundle;
+	}
+
+	public ResourceBundle getFrenchBundle() {
+		return frenchBundle;
 	}
 
 }
